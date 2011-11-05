@@ -68,7 +68,7 @@ class featuredCommentWidget extends WP_Widget {
 				$featuredCommentContent = $featuredComment->comment_content;
 				$featuredCommentPostID = $featuredComment->comment_post_ID;
 				$featuredCommentURL = get_permalink($featuredCommentPostID).'#comment-'.$commentID;
-				$featuredCommentByline = __('Posted by') . ' ' . $featuredCommentName;
+				$featuredCommentByline = __('Posted by') . '<br />' . $featuredCommentName;
 				
 				if ( $excerptSize != '' ) { 
 				    if (mb_strlen($featuredCommentContent) > $length) { 
@@ -80,7 +80,7 @@ class featuredCommentWidget extends WP_Widget {
 			?>
 			
 				<div class="featuredComment-cite">
-					<span class="featuredComment-author"><a href="<?php echo $featuredCommentURL; ?>"><br /><?php echo $featuredCommentByline; ?></a></span>
+					<span class="featuredComment-author"><a href="<?php echo $featuredCommentURL; ?>"><?php echo $featuredCommentByline; ?></a></span>
 					<span class="featuredComment-gravatar"><a href="<?php echo $featuredCommentURL; ?>"><?php echo get_avatar($featuredCommentEmail, $gravatarSize); ?></a></span>
 				</div>
 			
