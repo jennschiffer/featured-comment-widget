@@ -67,7 +67,7 @@ class featuredCommentWidget extends WP_Widget {
 				$featuredCommentEmail = $featuredComment->comment_author_email;
 				$featuredCommentContent = $featuredComment->comment_content;
 				$featuredCommentPostID = $featuredComment->comment_post_ID;
-				$featuredCommentURL = get_permalink($featuredCommentPostID).'/#comment-'.$commentID;
+				$featuredCommentURL = get_permalink($featuredCommentPostID).'#comment-'.$commentID;
 				
 				if ( $excerptSize != '' ) { 
 				    if (mb_strlen($featuredCommentContent) > $length) { 
