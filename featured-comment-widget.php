@@ -3,7 +3,7 @@
 Plugin Name: Featured Comment Widget
 Plugin URI: http://pancaketheorem.com/featured-comment-widget
 Description: A widget that allows you to showcase any comment that has been published on your site. All you need to do is enter the comment's ID in the widget form.
-Version: 1.2
+Version: 1.3
 Author: Jenn Schiffer
 Author URI: http://jennschiffer.com
 
@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 function featuredCommentWidget_init() {
 	register_widget('featuredCommentWidget');
+	load_plugin_textdomain('featured-comment-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
 add_action('init', 'featuredCommentWidget_init', 1);
@@ -45,7 +46,7 @@ add_action('wp_head', 'featuredCommentCSS');
 class featuredCommentWidget extends WP_Widget {
 
 	function featuredCommentWidget() {
-		$widget_ops = array('classname' => 'featured_comment_widget', 'description' => __('Enter a comment&apos;s ID to feature it on your sidebar.'));
+		$widget_ops = array('classname' => 'featured_comment_widget', 'description' => __('Enter a comment\'s ID to feature it on your sidebar.','featured-comment-widget'));
 		$this->WP_Widget('featuredComment', __('Featured Comment'), $widget_ops);
 	}
 
@@ -66,7 +67,7 @@ class featuredCommentWidget extends WP_Widget {
 				$featuredCommentEmail = $featuredComment->comment_author_email;
 				$featuredCommentContent = $featuredComment->comment_content;
 				$featuredCommentPostID = $featuredComment->comment_post_ID;
-				$featuredCommentURL = '/?p='.$featuredCommentPostID.'/#comment-'.$commentID;
+				$featuredCommentURL = get_permalink($featuredCommentPostID).'/#comment-'.$commentID;
 				
 				if ( $excerptSize != '' ) { 
 				    if (mb_strlen($featuredCommentContent) > $length) { 
@@ -78,7 +79,7 @@ class featuredCommentWidget extends WP_Widget {
 			?>
 			
 				<div class="featuredComment-cite">
-					<span class="featuredComment-author"><a href="<?php echo $featuredCommentURL; ?>">Posted by <br /><?php echo $featuredCommentName; ?></a></span>
+					<span class="featuredComment-author"><a href="<?php echo $featuredCommentURL; ?>"><br /><?php _e('Posted by','featured-comment-widget'); echo ' ' . $featuredCommentName; ?></a></span>
 					<span class="featuredComment-gravatar"><a href="<?php echo $featuredCommentURL; ?>"><?php echo get_avatar($featuredCommentEmail, $gravatarSize); ?></a></span>
 				</div>
 			
@@ -102,13 +103,13 @@ class featuredCommentWidget extends WP_Widget {
 		$gravatarSize = strip_tags($instance['gravatarSize']);
 		$excerptSize = strip_tags($instance['excerptSize']);
 	?>
-		<p><lable for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:'); ?></label>
+		<p><lable for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title','featured-comment-widget'); ?>:</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('commentID'); ?>"><?php _e('Comment ID:'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('commentID'); ?>"><?php _e('Comment ID','featured-comment-widget'); ?>:</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('commentID'); ?>" name="<?php echo $this->get_field_name('commentID'); ?>" type="text" value="<?php echo esc_attr($commentID); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('gravatarSize'); ?>"><?php _e('Gravatar width in pixels<br />(<em>leaving blank defaults to 25</em>):'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('gravatarSize'); ?>"><?php _e('Gravatar width in pixels','featured-comment-widget'); ?><br />(<em><?php _e('leaving blank defaults to 25','featured-comment-widget'); ?></em>):</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('gravatarSize'); ?>" name="<?php echo $this->get_field_name('gravatarSize'); ?>" type="text" value="<?php echo esc_attr($gravatarSize); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters<br />(<em>leave blank to NOT excerpt comment content</em>):'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters','featured-comment-widget'); ?><br />(<em><?php _e('leave blank to NOT excerpt comment content','featured-comment-widget'); ?></em>)</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('excerptSize'); ?>" name="<?php echo $this->get_field_name('excerptSize'); ?>" type="text" value="<?php echo esc_attr($excerptSize); ?>" /></p>
 		
 	<?php
