@@ -3,7 +3,7 @@
 Plugin Name: Featured Comment Widget
 Plugin URI: http://pancaketheorem.com/featured-comment-widget
 Description: A widget that allows you to showcase any comment that has been published on your site. All you need to do is enter the comment's ID in the widget form.
-Version: 1.3
+Version: 1.4
 Author: Jenn Schiffer
 Author URI: http://jennschiffer.com
 
@@ -70,10 +70,14 @@ class featuredCommentWidget extends WP_Widget {
 				$featuredCommentURL = get_permalink($featuredCommentPostID).'#comment-'.$commentID;
 				$featuredCommentByline = __('Posted by') . '<br />' . $featuredCommentName;
 				
-				if ( $excerptSize != '' ) { 
-				    if (mb_strlen($featuredCommentContent) > $length) { 
-				    	$featuredCommentContent = mb_substr($featuredCommentContent,0,$excerptSize).' [<a href="'.$featuredCommentURL.'">...</a>]';
-				    }	
+				if ( function_exists('mb_strlen') && function_exists('mb_substr') ) {
+					
+					if ( $excerptSize != '' ) { 
+					    if (mb_strlen($featuredCommentContent) > $length) { 
+					    	$featuredCommentContent = mb_substr($featuredCommentContent,0,$excerptSize).' [<a href="'.$featuredCommentURL.'">...</a>]';
+					    }	
+					}
+					
 				}
 			
 				echo '<div class="featuredComment-comment">'. $featuredCommentContent . '</div>';
@@ -110,8 +114,17 @@ class featuredCommentWidget extends WP_Widget {
 		<input class="widefat" id="<?php echo $this->get_field_id('commentID'); ?>" name="<?php echo $this->get_field_name('commentID'); ?>" type="text" value="<?php echo esc_attr($commentID); ?>" /></p>
 		<p><label for="<?php echo $this->get_field_id('gravatarSize'); ?>"><?php _e('Gravatar width in pixels','featured-comment-widget'); ?><br />(<em><?php _e('leaving blank defaults to 25','featured-comment-widget'); ?></em>):</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('gravatarSize'); ?>" name="<?php echo $this->get_field_name('gravatarSize'); ?>" type="text" value="<?php echo esc_attr($gravatarSize); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters','featured-comment-widget'); ?><br />(<em><?php _e('leave blank to NOT excerpt comment content','featured-comment-widget'); ?></em>)</label>
-		<input class="widefat" id="<?php echo $this->get_field_id('excerptSize'); ?>" name="<?php echo $this->get_field_name('excerptSize'); ?>" type="text" value="<?php echo esc_attr($excerptSize); ?>" /></p>
+		
+		<?php if ( function_exists('mb_strlen') && function_exists('mb_substr') ) { ?>
+				
+			<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters','featured-comment-widget'); ?><br />(<em><?php _e('leave blank to NOT excerpt comment content','featured-comment-widget'); ?></em>)</label>
+			<input class="widefat" id="<?php echo $this->get_field_id('excerptSize'); ?>" name="<?php echo $this->get_field_name('excerptSize'); ?>" type="text" value="<?php echo esc_attr($excerptSize); ?>" /></p>
+		
+		<?php }
+			  else {
+				  echo '<p>The functions required for excerpting comments do not exist on your site. Ask your host to enable <em>mbstring</em> on your server&apos;s PHP configuration.</p>';
+			  }
+		?>
 		
 	<?php
 	}

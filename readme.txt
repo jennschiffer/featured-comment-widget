@@ -4,13 +4,10 @@ Plugin Name: Featured Comment Widget
 Plugin URI: http://pancaketheorem.com/featured-comment-widget/
 Author: Jenn Schiffer
 Author URI: http://pancaketheorem.com/
-Donate link: http://pancaketheorem.com/contribute/
 Tags: comments, featured, sidebar
 Requires at least: 2.3
-Tested up to: 3.2.1
-Stable tag: 1.3
-
-A widget that allows you to showcase any comment that has been published on your site.
+Tested up to: 3.4.2
+Stable tag: 1.4
 
 == Description ==
 
@@ -20,8 +17,11 @@ Installing this plugin adds the Featured Comment Widget to your list of availabl
 
 == Changelog ==
 
+= 1.4 = 
+* Disables excerpting comments if mbstring not enabled in PHP configuration - a fancy hat tip to Allin for mentioning this error and its solution in the pancake theorem blog comments!
+
 = 1.3 =
-* Optimized permalink code
+* Optimized permalink gets
 * Added i18n .pot file for translation
 
 = 1.2 =
@@ -36,6 +36,15 @@ Installing this plugin adds the Featured Comment Widget to your list of availabl
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add the widget through the 'Widgets' submenu under 'Appearance' in WordPress
 4. Add the comment ID of the comment you want featured in the widget and save.
+
+== Widget CSS ==
+
+The following are the classes and explanations of them for those of you who want to style your widget in the custom.css file:
+
+* .featuredComment-comment - the comment text, default: { margin: 3px auto 5px;}
+* .featuredComment-cite - the citation that includes gravatar and author name, default: { display: block; text-align: left; line-height: 1em;}
+* .featuredComment-gravatar - the gravatar image within citation, default: {float: right; padding: 0px 5px;}
+* .featuredComment-author - the "posted by ..." author link within citation, default: {float: right;}
 
 == Screenshots ==
 
