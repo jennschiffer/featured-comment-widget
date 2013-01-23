@@ -6,8 +6,8 @@ Author: Jenn Schiffer
 Author URI: http://pancaketheorem.com/
 Tags: comments, featured, sidebar
 Requires at least: 2.3
-Tested up to: 3.4.2
-Stable tag: 1.4
+Tested up to: 3.5
+Stable tag: 1.5
 
 == Description ==
 
@@ -16,6 +16,9 @@ The Featured Comment Widget gives you the ability to shine a spotlight on some o
 Installing this plugin adds the Featured Comment Widget to your list of available widgets in the 'Widgets' submenu (which you can find under 'Appearance' in your WordPress dashboard). Every comment has an numeric ID, and putting that ID in the widget form results in the that comment, along with the name and Gravatar of its commenter, showing in the sidebar.  The Gravatar and username is automatically a link to that comment in its respective post.
 
 == Changelog ==
+
+= 1.5 =
+* Sets anonymous comment author names to "Anonymous." A million delicious Internet cupcakes for Andrew Gorry for catching and solving this in the pancake theorem blog comments!
 
 = 1.4 = 
 * Disables excerpting comments if mbstring not enabled in PHP configuration - a fancy hat tip to Allin for mentioning this error and its solution in the pancake theorem blog comments!

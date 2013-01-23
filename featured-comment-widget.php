@@ -3,11 +3,11 @@
 Plugin Name: Featured Comment Widget
 Plugin URI: http://pancaketheorem.com/featured-comment-widget
 Description: A widget that allows you to showcase any comment that has been published on your site. All you need to do is enter the comment's ID in the widget form.
-Version: 1.4
+Version: 1.5
 Author: Jenn Schiffer
 Author URI: http://jennschiffer.com
 
-Copyright 2011  Jenn Schiffer  (http://jennschiffer.com)
+Copyright 2013  Jenn Schiffer  (http://jennschiffer.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -63,7 +63,14 @@ class featuredCommentWidget extends WP_Widget {
 		else { echo $before_title . '' . $after_title; } 
  
 				$featuredComment = get_comment($commentID);
-				$featuredCommentName = $featuredComment->comment_author;
+				
+				if ($featuredComment->comment_author) {
+					$featuredCommentName = $featuredComment->comment_author;
+				}
+				else {
+					$featuredCommentName = "Anonymous";
+				}
+				
 				$featuredCommentEmail = $featuredComment->comment_author_email;
 				$featuredCommentContent = $featuredComment->comment_content;
 				$featuredCommentPostID = $featuredComment->comment_post_ID;
