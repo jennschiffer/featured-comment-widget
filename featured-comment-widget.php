@@ -2,8 +2,8 @@
 /*
 Plugin Name: Featured Comment Widget
 Plugin URI: http://pancaketheorem.com/featured-comment-widget
-Description: A widget that allows you to showcase any comment that has been published on your site. All you need to do is enter the comment's ID in the widget form.
-Version: 1.5
+Description: A widget that allows you to showcase any comment(s) that has been published on your site. All you need to do is enter the comment's ID (or multiple comma-delimited IDs) in the widget form.
+Version: 1.6
 Author: Jenn Schiffer
 Author URI: http://jennschiffer.com
 
@@ -33,20 +33,23 @@ add_action('init', 'featuredCommentWidget_init', 1);
 
 function featuredCommentCSS() {
 	echo '<style type="text/css">
-			.featuredComment-comment { margin: 3px auto 5px;}
+			.featuredComment-comment { margin: 20px auto; }
+			.featuredComment-comment-content { margin: 3px auto 5px;}
 			.featuredComment-cite { display: block; text-align: left; line-height: 1em;}
 			.featuredComment-cite:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 				.featuredComment-gravatar {float: right; padding: 0px 5px;}
 				.featuredComment-author {float: right;}
+			.featuredComment-pager { }
+			.featuredComment-next { padding: 5px; }
+			.featuredComment-prev { padding: 5px; }
 		  </style>';
 }
-
 add_action('wp_head', 'featuredCommentCSS');
 
 class featuredCommentWidget extends WP_Widget {
 
 	function featuredCommentWidget() {
-		$widget_ops = array('classname' => 'featured_comment_widget', 'description' => __('Enter a comment\'s ID to feature it on your sidebar.','featured-comment-widget'));
+		$widget_ops = array('classname' => 'featured_comment_widget', 'description' => __('Enter a comment\'s ID (or multiple comma-delimited IDs) to feature it on your sidebar.','featured-comment-widget'));
 		$this->WP_Widget('featuredComment', __('Featured Comment'), $widget_ops);
 	}
 
@@ -59,22 +62,35 @@ class featuredCommentWidget extends WP_Widget {
 		
 		echo $before_widget;
 		
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; }
-		else { echo $before_title . '' . $after_title; } 
+		// title of widget
+		if ( !empty( $title ) ) { 
+			echo $before_title . $title . $after_title; 
+		}
+		else { 
+			echo $before_title . '' . $after_title; 
+		} 
+		
+		// create array of all comment IDs split by commas
+		$commentIDArray = explode(",",$commentID);
  
-				$featuredComment = get_comment($commentID);
-				
+		// for each item in comment array, display featured comment
+		foreach ( $commentIDArray as $singleCommentID ) {
+		
+			$featuredComment = get_comment(trim($singleCommentID));
+			
+			if ($featuredComment) {
+	
 				if ($featuredComment->comment_author) {
 					$featuredCommentName = $featuredComment->comment_author;
 				}
 				else {
-					$featuredCommentName = "Anonymous";
+					$featuredCommentName = _e('Anonymous','featured-comment-widget');
 				}
 				
 				$featuredCommentEmail = $featuredComment->comment_author_email;
 				$featuredCommentContent = $featuredComment->comment_content;
 				$featuredCommentPostID = $featuredComment->comment_post_ID;
-				$featuredCommentURL = get_permalink($featuredCommentPostID).'#comment-'.$commentID;
+				$featuredCommentURL = get_permalink($featuredCommentPostID).'#comment-'.$singleCommentID;
 				$featuredCommentByline = __('Posted by') . '<br />' . $featuredCommentName;
 				
 				if ( function_exists('mb_strlen') && function_exists('mb_substr') ) {
@@ -86,16 +102,21 @@ class featuredCommentWidget extends WP_Widget {
 					}
 					
 				}
+				
+				echo '<div class="featuredComment-comment">';
+					echo '<div class="featuredComment-comment-content">'. $featuredCommentContent . '</div>';
+		
+					echo '<div class="featuredComment-cite">';
+						echo '<span class="featuredComment-author"><a href="' . $featuredCommentURL . '">' . $featuredCommentByline . '</a></span>';
+						echo '<span class="featuredComment-gravatar"><a href="' . $featuredCommentURL . '">' . get_avatar($featuredCommentEmail, $gravatarSize) . '</a></span>';
+					echo '</div>';
+					
+				echo '</div>'; // end comment block
 			
-				echo '<div class="featuredComment-comment">'. $featuredCommentContent . '</div>';
-			?>
-			
-				<div class="featuredComment-cite">
-					<span class="featuredComment-author"><a href="<?php echo $featuredCommentURL; ?>"><?php echo $featuredCommentByline; ?></a></span>
-					<span class="featuredComment-gravatar"><a href="<?php echo $featuredCommentURL; ?>"><?php echo get_avatar($featuredCommentEmail, $gravatarSize); ?></a></span>
-				</div>
-			
-	<?php
+			}// end if comment exists
+	
+		}// end for each item in comment array
+	
 		echo $after_widget;
 	}
 
@@ -115,16 +136,16 @@ class featuredCommentWidget extends WP_Widget {
 		$gravatarSize = strip_tags($instance['gravatarSize']);
 		$excerptSize = strip_tags($instance['excerptSize']);
 	?>
-		<p><lable for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title','featured-comment-widget'); ?>:</label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title','featured-comment-widget'); ?>:</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('commentID'); ?>"><?php _e('Comment ID','featured-comment-widget'); ?>:</label>
+		<p><label for="<?php echo $this->get_field_id('commentID'); ?>"><?php _e('Comment ID','featured-comment-widget') ?><br /><em>(<?php _e('or multiple comma-delimited IDs - eg: 522, 521, 7','featured-comment-widget'); ?>)</em>:</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('commentID'); ?>" name="<?php echo $this->get_field_name('commentID'); ?>" type="text" value="<?php echo esc_attr($commentID); ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('gravatarSize'); ?>"><?php _e('Gravatar width in pixels','featured-comment-widget'); ?><br />(<em><?php _e('leaving blank defaults to 25','featured-comment-widget'); ?></em>):</label>
+		<p><label for="<?php echo $this->get_field_id('gravatarSize'); ?>"><?php _e('Gravatar width in pixels','featured-comment-widget'); ?><br /><em>(<?php _e('leaving blank defaults to 25','featured-comment-widget'); ?>)</em>:</label>
 		<input class="widefat" id="<?php echo $this->get_field_id('gravatarSize'); ?>" name="<?php echo $this->get_field_name('gravatarSize'); ?>" type="text" value="<?php echo esc_attr($gravatarSize); ?>" /></p>
 		
 		<?php if ( function_exists('mb_strlen') && function_exists('mb_substr') ) { ?>
 				
-			<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters','featured-comment-widget'); ?><br />(<em><?php _e('leave blank to NOT excerpt comment content','featured-comment-widget'); ?></em>)</label>
+			<p><label for="<?php echo $this->get_field_id('excerptSize'); ?>"><?php _e('Comment excerpt size in characters','featured-comment-widget'); ?><br /><em>(<?php _e('leave blank to NOT excerpt comment content','featured-comment-widget'); ?>)</em>:</label>
 			<input class="widefat" id="<?php echo $this->get_field_id('excerptSize'); ?>" name="<?php echo $this->get_field_name('excerptSize'); ?>" type="text" value="<?php echo esc_attr($excerptSize); ?>" /></p>
 		
 		<?php }
