@@ -16,39 +16,43 @@ msgstr ""
 "X-Poedit-Language: English\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: featured-comment-widget.php:49
+#: featured-comment-widget.php:52
 msgid "Enter a comment's ID to feature it on your sidebar."
 msgstr ""
 
-#: featured-comment-widget.php:50
+#: featured-comment-widget.php:53
 msgid "Featured Comment"
 msgstr ""
 
-#: featured-comment-widget.php:82
+#: featured-comment-widget.php:94
 msgid "Posted by"
 msgstr ""
 
-#: featured-comment-widget.php:106
+#: featured-comment-widget.php:139
 msgid "Widget Title"
 msgstr ""
 
-#: featured-comment-widget.php:108
+#: featured-comment-widget.php:141
 msgid "Comment ID"
 msgstr ""
 
-#: featured-comment-widget.php:110
+#: featured-comment-widget.php:141
+msgid "or multiple comma-delimited IDs - eg: 522, 521, 7"
+msgtr ""
+
+#: featured-comment-widget.php:143
 msgid "Gravatar width in pixels"
 msgstr ""
 
-#: featured-comment-widget.php:110
+#: featured-comment-widget.php:143
 msgid "leaving blank defaults to 25"
 msgstr ""
 
-#: featured-comment-widget.php:112
+#: featured-comment-widget.php:148
 msgid "Comment excerpt size in characters"
 msgstr ""
 
-#: featured-comment-widget.php:112
+#: featured-comment-widget.php:148
 msgid "leave blank to NOT excerpt comment content"
 msgstr ""
 
