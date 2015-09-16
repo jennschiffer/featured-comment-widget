@@ -1,12 +1,12 @@
 === Plugin Name ===
 Contributors: jennschiffer
 Plugin Name: Featured Comment Widget
-Plugin URI: http://pancaketheorem.com/featured-comment-widget/
+Plugin URI: http://github.com/jennschiffer/featured-comment-widget/
 Author: Jenn Schiffer
-Author URI: http://pancaketheorem.com/
+Author URI: http://jennmoney.biz/
 Tags: comments, featured, sidebar, comment, comment widget, showcase, commenters
 Requires at least: 2.3
-Tested up to: 3.6
+Tested up to: 4.3
 Stable tag: 1.6
 
 == Description ==
@@ -16,6 +16,9 @@ The Featured Comment Widget gives you the ability to shine a spotlight on some o
 Installing this plugin adds the Featured Comment Widget to your list of available widgets in the 'Widgets' submenu (which you can find under 'Appearance' in your WordPress dashboard). Every comment has an numeric ID, and putting that ID in the widget form results in the that comment (or commentS if you enter multiple IDs), along with the name and Gravatar of its commenter, showing in the sidebar.  The Gravatar and username is automatically a link to that comment in its respective post.
 
 == Changelog ==
+
+= 1.7 =
+* Fixes "WP_Widget deprecated" bug to work with WordPress 4.3 update.
 
 = 1.6 =
 * Allows multiple comments to be featured when entering comma-delimited comment IDs - probably the most requested feature since I created this plugin!
